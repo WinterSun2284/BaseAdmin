@@ -18,6 +18,7 @@
     <modules>
         <module>BaseWeb</module>
         <module>BaseCore</module>
+        <module>BaseCommon</module>
     </modules>
 
     <properties>
@@ -32,6 +33,20 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.78</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.26</version>
+        </dependency>
+
     </dependencies>
 
 </project>

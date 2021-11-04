@@ -1,5 +1,7 @@
 HELP.md
-BaseWeb/target/
+BaseWeb/target/**
+BaseCore/target/**
+BaseCommon/target/**
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
