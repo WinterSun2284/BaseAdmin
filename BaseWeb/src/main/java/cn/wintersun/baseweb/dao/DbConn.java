@@ -123,6 +123,10 @@ public class DbConn extends RequestPage {
 
     private transient String ipAndPort;
 
+    private transient String startTime;
+
+    private transient String endTime;
+
     public static final String COL_ID = "ID";
 
     public static final String COL_DB_NAME = "DB_NAME";

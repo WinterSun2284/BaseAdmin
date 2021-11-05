@@ -5,6 +5,7 @@ import cn.wintersun.basecommon.common.Result;
 import cn.wintersun.baseweb.dao.DbConn;
 import cn.wintersun.baseweb.dao.DbType;
 import cn.wintersun.baseweb.service.intrer.databse.DbConnService;
+import cn.wintersun.baseweb.service.intrer.databse.DbTypeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +48,6 @@ public class DbConnController {
         return dbConnService.testConn(dbConn);
     }
 
-
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     public Result<Object> delete(@RequestBody String ids){
         try {
@@ -56,5 +56,4 @@ public class DbConnController {
             return Result.error(e.getMessage());
         }
     }
-
 }

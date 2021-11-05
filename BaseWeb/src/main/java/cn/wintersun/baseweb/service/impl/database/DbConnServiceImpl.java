@@ -6,6 +6,7 @@ import cn.wintersun.basecommon.common.ResultCode;
 import cn.wintersun.basecommon.utils.Encryptor;
 import cn.wintersun.baseweb.dao.DbConn;
 import cn.wintersun.baseweb.dao.DbType;
+import cn.wintersun.baseweb.dao.Roles;
 import cn.wintersun.baseweb.dao.RolesModules;
 import cn.wintersun.baseweb.mapper.DbConnMapper;
 import cn.wintersun.baseweb.mapper.DbTypeMapper;
@@ -52,6 +53,45 @@ public class DbConnServiceImpl implements DbConnService {
     @Override
     public Result<IPage<DbConn>> list(DbConn dbConn) {
         QueryWrapper<DbConn> query = Wrappers.query();
+        if(dbConn.getDbType()!=null){
+            query.eq(DbConn.COL_DB_TYPE, dbConn.getDbType());
+        }
+
+        if (StringUtils.isNotEmpty(dbConn.getDbName())){
+            query.like(DbConn.COL_DB_NAME, dbConn.getDbName());
+        }
+
+        if (StringUtils.isNotEmpty(dbConn.getBusinessName())){
+            query.like(DbConn.COL_BUSINESS_NAME, dbConn.getBusinessName());
+        }
+
+        if (StringUtils.isNotEmpty(dbConn.getDbIp())){
+            query.like(DbConn.COL_DB_IP, dbConn.getDbIp());
+        }
+
+        if (StringUtils.isNotEmpty(dbConn.getDbPort())){
+            query.eq(DbConn.COL_DB_PORT, dbConn.getDbPort());
+        }
+
+        if (StringUtils.isNotEmpty(dbConn.getServerName())){
+            query.like(DbConn.COL_SERVER_NAME, dbConn.getServerName());
+        }
+
+        if (dbConn.getDetectOnoff()!=null){
+            query.eq(DbConn.COL_DETECT_ONOFF, dbConn.getDetectOnoff());
+        }
+
+        if (dbConn.getConnStatus()!=null){
+            query.eq(DbConn.COL_CONN_STATUS, dbConn.getConnStatus());
+        }
+        if (StringUtils.isNotEmpty(dbConn.getStartTime())) {
+            query.ge(DbConn.COL_CREATE_TIME, dbConn.getStartTime());
+        }
+
+        if (StringUtils.isNotEmpty(dbConn.getEndTime())) {
+            query.le(DbConn.COL_CREATE_TIME, dbConn.getEndTime());
+        }
+
 
         Page<DbConn> page = new Page<>(dbConn.getCurrent(), dbConn.getPageSize());
 
@@ -107,7 +147,7 @@ public class DbConnServiceImpl implements DbConnService {
         if (dbConn.getId() != null) {
             if (StringUtils.isNotEmpty(dbConn.getDbPassword())) {
                 dbConn.setDbPassword(Encryptor.encoder(dbConn.getDbPassword()));
-            }else {
+            } else {
                 DbConn dbConn1 = dbConnMapper.selectById(dbConn.getId());
                 dbConn.setDbPassword(dbConn1.getDbPassword());
             }
@@ -138,4 +178,21 @@ public class DbConnServiceImpl implements DbConnService {
         dbConnMapper.deleteBatchIds(idList);
         return Result.ok();
     }
+
+    @Override
+    public void autoDetectDb() {
+        List<DbConn> dbConns = dbConnMapper.selectList(null);
+        for (DbConn dbConn : dbConns) {
+            if (dbConn.getDetectOnoff()) {
+                Result<Boolean> result = jdbcConnectionUtil.testConn(dbConn);
+                dbConnMapper.updateConnStatusById(result.getData(), dbConn.getId());
+                if (!result.getData()) {
+                    //TODO 执行告警逻辑
+                    LOGGER.error("数据库连接检测，数据库{}检测到连接失败", dbConn.getDbName());
+                }
+                LOGGER.debug("数据库连接检测，当前数据库{}，数据库连接状态{}",dbConn.getDbName(),result.getData()?"正常":"异常");
+            }
+        }
+    }
+
 }

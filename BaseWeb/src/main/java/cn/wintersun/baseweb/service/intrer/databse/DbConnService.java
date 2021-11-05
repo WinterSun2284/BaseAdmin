@@ -25,4 +25,7 @@ public interface DbConnService {
     Result<Object> save(DbConn dbConn);
 
     Result<Object> delete(String ids) throws Exception;
+
+    void autoDetectDb();
+
 }
