@@ -1,6 +1,7 @@
 package cn.wintersun.baseweb.controller.admin;
 
 import cn.wintersun.basecommon.common.Result;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description TODO
  */
 @RestController
+@PreAuthorize("hasAuthority('1')")
 public class Index {
     @RequestMapping("admin")
     public Result<Object> index(){

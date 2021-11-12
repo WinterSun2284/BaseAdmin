@@ -8,6 +8,7 @@ import cn.wintersun.baseweb.service.intrer.databse.DbConnService;
 import cn.wintersun.baseweb.service.intrer.databse.DbTypeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/database/dbConn")
+@PreAuthorize("hasAuthority('4')")
 public class DbConnController {
 
     @Autowired private DbConnService dbConnService;
