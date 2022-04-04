@@ -18,7 +18,7 @@ public class Encryptor {
      **/
     public static String encoder(String value) {
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword("wintersun");
+        encryptor.setPassword("base");
         return encryptor.encrypt(value);
     }
 
@@ -30,16 +30,8 @@ public class Encryptor {
      **/
     public static String decoder(String value) {
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword("wintersun");
+        encryptor.setPassword("base");
         return encryptor.decrypt(value);
-    }
-
-    public static void main(String[] args) {
-        String a="wintersun";
-        String encoder = Encryptor.encoder(a);
-        System.out.println(encoder);
-        String decoder = Encryptor.decoder(encoder);
-        System.out.println(decoder);
     }
 
 }
